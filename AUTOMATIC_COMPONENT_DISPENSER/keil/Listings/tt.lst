@@ -1,0 +1,52 @@
+C51 COMPILER V9.57.0.0   TT                                                                03/02/2018 20:12:14 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE TT
+OBJECT MODULE PLACED IN .\Objects\tt.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE tt.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\tt.lst
+                    -) TABS(2) OBJECT(.\Objects\tt.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include<i2c.h>
+   3          #include<lcd.h>
+   4          unsigned char bh=0x00,bl=0xff;
+   5          void main()
+   6          {
+   7   1        unsigned char rr;
+   8   1        init_lcd();
+   9   1        clr_lcd();
+  10   1        set_cur(1,0);
+  11   1        lstrng("Writing 0");
+  12   1        while(!(bl==0x00))
+  13   1        {
+  14   2          eeprom_write(bh,bl,0);
+  15   2          bl=bl-0x01;
+  16   2          delay(10);
+  17   2        }
+  18   1        delay(200);
+  19   1        clr_lcd();
+  20   1        bl=0xff;
+  21   1        while(!(bl==0x00))
+  22   1        {
+  23   2        rr=eeprom_read(bh,bl);
+  24   2        lvar(rr);
+  25   2          delay(10);
+  26   2        }
+  27   1        while(1);
+  28   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1623    ----
+   CONSTANT SIZE    =     82    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     21      34
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

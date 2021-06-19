@@ -1,0 +1,283 @@
+C51 COMPILER V9.57.0.0   HI                                                                04/03/2018 20:48:33 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE HI
+OBJECT MODULE PLACED IN .\Objects\hi.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\hi.c OPTIMIZE(8,SPEED) PRINT(.\Listings\hi.lst) TABS(2) OBJECT(.\Obje
+                    -cts\hi.obj)
+
+line level    source
+
+   1          /************************************************************
+   2          *                   Program for                             *
+   3          *             Automatic Component Dispenser                 *
+   4          *                Nuvoton W78E052D(8051)                     *
+   5          *                  EM18-RFID READER                         *
+   6          *                   STEPPER MOTOR                           * 
+   7          *     Authors:                                              *
+   8          *             Sagar Srivatsa SR(1SI15EC086)                 *
+   9          *             Sneha MR(1SI15EC100)                          *
+  10          *             U Pavithra(1SI15EC112)                        *
+  11          *             Ravichandra T(1SI16EC419)                     *
+  12          *                                                           *
+  13          ************************************************************/
+  14          #include<reg51.h> 
+  15          #include<lcd.h> /* Lcd and Keypad header files*/
+  16          #include<functions.h>   /* I2C and other Functions */
+*** WARNING C206 IN LINE 371 OF functions.h: 'Damage': missing function-prototype
+  17          
+  18          void main()
+  19            {   
+  20   1          int x;
+  21   1          unsigned char i,kk,ku;
+  22   1          IR=1;/* PORT Pin as input*/
+  23   1          init_lcd();/*Initializing LCD */
+  24   1          clr_lcd();/* Clear LCD Display */
+  25   1          set_cur(1,5);
+  26   1          lstrng("Automatic");
+  27   1          set_cur(2,5);
+  28   1          lstrng("Component");
+  29   1          set_cur(3,5);
+  30   1          lstrng("Dispenser");
+  31   1          delay(200);
+  32   1          clr_lcd();
+  33   1          while(1)
+  34   1          {
+  35   2            clr_lcd();
+  36   2            while(!c_clockwise(100));/* For Calibration */
+  37   2            lstrng("Scan the card!");
+  38   2            init_rfid();/* Initializing Serial port */
+  39   2            get_id();/* Reading RFID Card */
+  40   2            set_cur(2,0);
+  41   2            for(i=0;i<12;i++)
+  42   2              ldata(ID[i]);
+  43   2            delay(300);
+  44   2            x=valid();/* Validating Card */
+  45   2            if(x==1)/* If Valid Card */
+  46   2            {
+  47   3              clr_lcd();
+  48   3              set_cur(1,3);
+  49   3              lstrng("Card detected!");
+  50   3              set_cur(2,5);
+  51   3              switch(ID[10])
+  52   3              {
+  53   4                case 'A': while(1)
+C51 COMPILER V9.57.0.0   HI                                                                04/03/2018 20:48:33 PAGE 2   
+
+  54   4                          {
+  55   5                          lstrng("Table no 1");
+  56   5                          EEPROM_red(1);
+  57   5                          init_disp();
+  58   5                          if(flag==1)
+  59   5                          {
+  60   6                            EEPROM_update(6);
+  61   6                            EEPROM_red(1);
+  62   6                            for(i=0;i<8;i++)
+  63   6                              {
+  64   7                                I1[i]=R[i]-I1[i];
+  65   7                                if(I1[i]<0)
+  66   7                                    I1[i]=0;
+  67   7                              }
+  68   6                          }                     
+  69   5                          clr_lcd();
+  70   5                          EEPROM_update(1);
+  71   5                          flag=0;
+  72   5                          }break;
+  73   4                case 'F': while(1)
+  74   4                          {
+  75   5                          lstrng("Table no 2");
+  76   5                            EEPROM_red(2);
+  77   5                          init_disp();
+  78   5                            if(flag==1)
+  79   5                          {
+  80   6                            EEPROM_update(7);
+  81   6                            EEPROM_red(2);
+  82   6                            for(i=0;i<8;i++)
+  83   6                              {
+  84   7                                I1[i]=R[i]-I1[i];
+  85   7                                if(I1[i]<0)
+  86   7                                    I1[i]=0;
+  87   7                              }
+  88   6                          }                     
+  89   5                          clr_lcd();
+  90   5                          EEPROM_update(2);
+  91   5                          flag=0;
+  92   5                          }break;
+  93   4                case 'C': while(1)
+  94   4                          {
+  95   5                          lstrng("Table no 3");
+  96   5                            EEPROM_red(3);
+  97   5                          init_disp();
+  98   5                            if(flag==1)
+  99   5                          {
+ 100   6                            EEPROM_update(8);
+ 101   6                            EEPROM_red(3);
+ 102   6                            for(i=0;i<8;i++)
+ 103   6                              {
+ 104   7                                I1[i]=R[i]-I1[i];
+ 105   7                                if(I1[i]<0)
+ 106   7                                    I1[i]=0;
+ 107   7                              }
+ 108   6                          }                     
+ 109   5                          clr_lcd();
+ 110   5                          EEPROM_update(3);
+ 111   5                          flag=0;
+ 112   5                          }break;
+ 113   4                case '9': while(1)  
+ 114   4                          {
+ 115   5                          lstrng("Table no 4");
+C51 COMPILER V9.57.0.0   HI                                                                04/03/2018 20:48:33 PAGE 3   
+
+ 116   5                          EEPROM_red(4);
+ 117   5                            init_disp();
+ 118   5                            if(flag==1)
+ 119   5                          {
+ 120   6                            EEPROM_update(9);
+ 121   6                            EEPROM_red(4);
+ 122   6                            for(i=0;i<8;i++)
+ 123   6                              {
+ 124   7                                I1[i]=R[i]-I1[i];
+ 125   7                                if(I1[i]<0)
+ 126   7                                    I1[i]=0;
+ 127   7                              }
+ 128   6                          }                     
+ 129   5                          clr_lcd();
+ 130   5                          EEPROM_update(4);
+ 131   5                          flag=0;
+ 132   5                          }break;
+ 133   4                case '2': while(1)
+ 134   4                          {
+ 135   5                          lstrng("Table no 5");
+ 136   5                          EEPROM_red(5);
+ 137   5                            init_disp();
+ 138   5                            if(flag==1)
+ 139   5                          {
+ 140   6                            EEPROM_update(10);
+ 141   6                            EEPROM_red(1);
+ 142   6                            for(i=0;i<8;i++)
+ 143   6                              {
+ 144   7                                I1[i]=R[i]-I1[i];
+ 145   7                                if(I1[i]<0)
+ 146   7                                    I1[i]=0;
+ 147   7                              }
+ 148   6                          }                     
+ 149   5                          clr_lcd();
+ 150   5                          EEPROM_update(5);
+ 151   5                          flag=0;
+ 152   5                          }break;
+ 153   4                        
+ 154   4              }
+ 155   3            }
+ 156   2          else if(x==2)
+ 157   2            {
+ 158   3              clr_lcd();while(1){clr_lcd();
+ 159   4              lstrng("LAB USER");
+ 160   4              set_cur(2,0);
+ 161   4              lstrng("1-->Details");
+ 162   4              set_cur(3,0);
+ 163   4              lstrng("2-->Clear");
+ 164   4                set_cur(4,0);
+ 165   4              lstrng("3-->Damaged");
+ 166   4              kk=key();
+ 167   4                if(kk=='D')
+ 168   4                  break;
+ 169   4              if(kk=='1')
+ 170   4              {
+ 171   5                clr_lcd();
+ 172   5                lstrng("Enter table no:");
+ 173   5                ku=key();
+ 174   5                switch(ku)
+ 175   5                {
+ 176   6                  case '1':EEPROM_red(1);break;
+ 177   6                  case '2':EEPROM_red(2);break;
+C51 COMPILER V9.57.0.0   HI                                                                04/03/2018 20:48:33 PAGE 4   
+
+ 178   6                  case '3':EEPROM_red(3);break;
+ 179   6                  case '4':EEPROM_red(4);break;
+ 180   6                  case '5':EEPROM_red(5);break;
+ 181   6                }
+ 182   5                clr_lcd();
+ 183   5                set_cur(1,0);
+ 184   5                lstrng("7400:");ldata(R[0]+48);
+ 185   5                set_cur(1,9);
+ 186   5                lstrng("7402:");ldata(R[1]+48);
+ 187   5                set_cur(2,0);
+ 188   5                lstrng("MUX:");ldata(R[2]+48);
+ 189   5                set_cur(2,9);
+ 190   5                lstrng("7404:");ldata(R[3]+48);
+ 191   5                set_cur(3,0);
+ 192   5                lstrng("7486:");ldata(R[4]+48);
+ 193   5                set_cur(3,9);
+ 194   5                lstrng("741:");ldata(R[5]+48);
+ 195   5                set_cur(4,0);
+ 196   5                lstrng("7483:");ldata(R[6]+48);
+ 197   5                set_cur(4,9);
+ 198   5                lstrng("4051:");ldata(R[7]+48);
+ 199   5                delay(600);
+ 200   5              }
+ 201   4            if(kk=='2')
+ 202   4            {
+ 203   5              clr_lcd();
+ 204   5              lstrng("Clearing...");
+ 205   5              for(i=0;i<150;i++)
+ 206   5                eeprom_write(i,0);
+ 207   5              delay(100);
+ 208   5              clr_lcd();
+ 209   5            }
+ 210   4            if(kk=='3')
+ 211   4            {clr_lcd();
+ 212   5                lstrng("Enter table no:");
+ 213   5                ku=key();
+ 214   5                switch(ku)
+ 215   5                {
+ 216   6                  case '1':EEPROM_red(6);break;
+ 217   6                  case '2':EEPROM_red(7);break;
+ 218   6                  case '3':EEPROM_red(8);break;
+ 219   6                  case '4':EEPROM_red(9);break;
+ 220   6                  case '5':EEPROM_red(10);break;
+ 221   6                }
+ 222   5                clr_lcd();
+ 223   5                set_cur(1,0);
+ 224   5                lstrng("7400:");ldata(R[0]+48);
+ 225   5                set_cur(1,9);
+ 226   5                lstrng("7402:");ldata(R[1]+48);
+ 227   5                set_cur(2,0);
+ 228   5                lstrng("MUX:");ldata(R[2]+48);
+ 229   5                set_cur(2,9);
+ 230   5                lstrng("7404:");ldata(R[3]+48);
+ 231   5                set_cur(3,0);
+ 232   5                lstrng("7486:");ldata(R[4]+48);
+ 233   5                set_cur(3,9);
+ 234   5                lstrng("741:");ldata(R[5]+48);
+ 235   5                set_cur(4,0);
+ 236   5                lstrng("7483:");ldata(R[6]+48);
+ 237   5                set_cur(4,9);
+ 238   5                lstrng("4051:");ldata(R[7]+48);
+ 239   5                delay(600);
+C51 COMPILER V9.57.0.0   HI                                                                04/03/2018 20:48:33 PAGE 5   
+
+ 240   5              }
+ 241   4          }
+ 242   3          }
+ 243   2          else 
+ 244   2              {
+ 245   3                clr_lcd();
+ 246   3                lstrng("Invalid Card!");
+ 247   3              }
+ 248   2        }
+ 249   1      }
+*** WARNING C291 IN LINE 278 OF ..\hi.c: not every exit path returns a value
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   4771    ----
+   CONSTANT SIZE    =    481    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     52      45
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,4 @@
+".\Objects\tt.obj" 
+TO ".\Objects\eeprom" 
+PRINT(".\Listings\eeprom.m51") RAMSIZE(256) 
+CODE( 0X0000-0X1FFF )

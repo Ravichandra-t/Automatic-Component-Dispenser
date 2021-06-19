@@ -1,0 +1,4 @@
+".\Objects\hi.obj" 
+TO ".\Objects\acd" 
+PRINT(".\Listings\acd.m51") RAMSIZE(256) 
+CODE( 0X0000-0X1FFF )
